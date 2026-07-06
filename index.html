@@ -117,6 +117,11 @@
 
     const builder = new google.picker.PickerBuilder()
       .setOAuthToken(token)
+      // Google's Picker backend validates the request against the calling
+      // page's origin — without this explicitly set, requests can come back
+      // as a flat 403 ("you do not have access to this page") even though
+      // the OAuth token itself is perfectly valid.
+      .setOrigin(window.location.protocol + "//" + window.location.host)
       .addView(recentView)
       .addView(docsView)
       .setCallback(onPickerCallback);
